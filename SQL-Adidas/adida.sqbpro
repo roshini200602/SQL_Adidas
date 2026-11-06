@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Asus/Downloads/pizza_sales.csv/adida.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1748"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Adidas_US_Sales" custom_title="0" dock_id="1" table="4,15:mainAdidas_US_Sales"/><dock_state state="000000ff00000000fd00000001000000020000043c000002b4fc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000043c0000011800ffffff0000043c0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Adidas_US_Sales" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="53"/><column index="2" value="109"/><column index="3" value="66"/><column index="4" value="85"/><column index="5" value="78"/><column index="6" value="117"/><column index="7" value="117"/><column index="8" value="202"/><column index="9" value="90"/><column index="10" value="66"/><column index="11" value="86"/><column index="12" value="99"/><column index="13" value="86"/><column index="14" value="101"/><column index="15" value="109"/><column index="16" value="67"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">select * from Adidas_US_Sales;
+
+-- Part 1 — Overall KPIs 
+-- 1. Overall Sales Informtion 
+-- Total sales  
+select sum(total_sales) as total_sales from Adidas_US_Sales;
+-- Total units sold  
+select sum(units_sold) as total_unit_sold from Adidas_US_Sales;
+-- Total number of transactions  
+SELECT COUNT(*) AS total_transactions FROM Adidas_US_Sales;
+-- Average sales per transaction  
+SELECT AVG(total_sales) AS average_sales_per_transaction FROM Adidas_US_Sales;
+-- Average units sold per transaction  
+SELECT AVG(Units_Sold) AS average_units_per_transaction FROM Adidas_US_Sales;
+-- Total operating profit  
+SELECT SUM(Operating_Profit) AS total_operating_profit FROM Adidas_US_Sales;
+
+-- 2. Profit Information  
+-- Average operating profit per transaction  
+SELECT AVG(Operating_Profit) AS Average_operating_profit FROM Adidas_US_Sales;
+-- Overall operating profit percentage 
+SELECT(SUM(Operating_Profit) / SUM(Total_Sales))AS Overall_Operating_Profit_Percentage FROM Adidas_US_Sales;
+
+-- 3. Retailer Sales 
+-- For each retailer, find: 
+-- Total sales  
+select retailer,sum(total_sales) as total_sales from Adidas_US_Sales group by retailer;
+-- Total units sold
+  select retailer,sum(units_sold) as total_unit_sold from Adidas_US_Sales group by retailer;
+-- Total operating profit  
+SELECT retailer,SUM(Operating_Profit) AS total_operating_profit FROM Adidas_US_Sales group  by retailer  ;
+
+
+-- 4. Product Sales 
+-- For each product, find: 
+-- Total sales  
+select product, sum(total_sales) as total_sales from Adidas_US_Sales group by product;
+-- Total units sold
+  select product,sum(units_sold) as total_unit_sold from Adidas_US_Sales group by product;
+  
+-- Part 2 — Business Analysis 
+-- 5. Region Sales 
+--  For each region, find: 
+-- Total sales  
+select region,sum(total_sales) as total_sales from Adidas_US_Sales group by region;
+-- Total units sold
+  select region,sum(units_sold) as total_unit_sold from Adidas_US_Sales group by region;
+-- Total operating profit  
+SELECT region,SUM(Operating_Profit) AS total_operating_profit FROM Adidas_US_Sales group  by region ; 
+
+-- 6. Retailer Profit 
+-- For each retailer, find: 
+-- Total sales  
+select retailer,sum(total_sales) as total_sales from Adidas_US_Sales group by retailer;
+-- Total units sold
+  select retailer,sum(units_sold) as total_unit_sold from Adidas_US_Sales group by retailer;
+-- Average operating profit per transaction 
+SELECT retailer,avg(Operating_Profit) AS total_operating_profit FROM Adidas_US_Sales group  by retailer ;     
+
+
+--7. Sales Method Analysis 
+-- For each sales method (Online, Outlet, and In-store), find: 
+-- Total transactions  
+SELECT sales_method,COUNT(*) AS total_transactions FROM Adidas_US_Sales group as sales_method;
+-- Total sales  
+select sales_method,sum(total_sales) as total_sales from Adidas_US_Sales group by sales_method;
+-- Total units sold
+  select sales_method,sum(units_sold) as total_unit_sold from Adidas_US_Sales group by sales_method;
+-- Average sales per transaction  
+select sales_method,avg(total_sales) as total_sales from Adidas_US_Sales group by sales_method;
+-- Total operating profit  
+ SELECT sales_method,SUM(Operating_Profit) AS total_operating_profit FROM Adidas_US_Sales group  by sales_method ; 
+
+
+-- 8. Product and Sales Method
+-- Find the total sales for each product under each sales method
+-- Online
+SELECT Product,SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales WHERE Sales_Method = 'Online' GROUP BY Product;
+-- Outlet
+SELECT Product,SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales WHERE Sales_Method = 'Outlet' GROUP BY Product;
+-- In-store
+SELECT Product,SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales WHERE Sales_Method = 'In-store'GROUP BY Product;
+
+-- 9. Top 5 States
+-- Find the top 5 states based on total sales
+
+
+-- State and Total Sales
+SELECT  State, SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales GROUP BY State ORDER BY Total_Sales DESC limit 5;
+
+
+-- State and Total Units Sold
+SELECT State,SUM(Units_Sold) AS Total_Units_Sold FROM Adidas_US_Sales GROUP BY State ORDER BY Total_Units_Sold DESC limit 5;
+
+
+-- State and Total Operating Profit
+SELECT State,SUM(operating_profit) AS Total_Operating_Profit FROM Adidas_US_Sales GROUP BY State ORDER BY Total_Operating_Profit DESC limit 5;
+
+-- 10. Top 5 Cities
+-- Find the top 5 cities based on total operating profit
+
+-- City and Total Sales
+SELECT  City, SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales GROUP BY City ORDER BY Total_Sales DESC limit 5;
+
+
+-- City and Total Operating Profit
+SELECT City,SUM(Operating_Profit) AS Total_Operating_Profit FROM Adidas_US_Sales GROUP BY City ORDER BY Total_Operating_Profit DESC limit 5;
+
+
+-- City and Total Units Sold
+SELECT City,SUM(Units_Sold) AS Total_Units_Sold FROM Adidas_US_Sales GROUP BY City ORDER BY Total_Units_Sold DESC limit 5;
+
+-- 11. Yearly Sales
+
+-- Total sales for each year
+SELECT strftime('%Y', Invoice_Date) AS Year, SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales GROUP BY strftime('%Y', Invoice_Date) ORDER BY Year;
+
+-- Total units sold for each year
+SELECT strftime('%Y', Invoice_Date) AS Year, SUM(Units_Sold) AS Total_Units_Sold FROM Adidas_US_Sales GROUP BY strftime('%Y', Invoice_Date) ORDER BY Year;
+
+-- Total operating profit for each year
+SELECT strftime('%Y', Invoice_Date) AS Year, SUM(Operating_Profit) AS Total_Operating_Profit FROM Adidas_US_Sales GROUP BY strftime('%Y', Invoice_Date) ORDER BY Year;
+
+-- Total transactions for each year
+SELECT strftime('%Y', Invoice_Date) AS Year, COUNT(*) AS Total_Transactions FROM Adidas_US_Sales GROUP BY strftime('%Y', Invoice_Date) ORDER BY Year;
+
+
+-- 12. Monthly Sales
+
+-- Total sales for each month
+SELECT CASE strftime('%m', Invoice_Date) WHEN '01' THEN 'January' WHEN '02' THEN 'February' WHEN '03' THEN 'March' WHEN '04' THEN 'April' WHEN '05' THEN 'May' WHEN '06' THEN 'June' WHEN '07' THEN 'July' WHEN '08' THEN 'August' WHEN '09' THEN 'September' WHEN '10' THEN 'October' WHEN '11' 
+THEN 'November' WHEN '12' THEN 'December' END AS Month_Name, SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales GROUP BY strftime('%m', Invoice_Date) ORDER BY sales_amount DESC;
+
+
+-- 13. Year and Month Sales
+
+-- Total sales, units sold and operating profit for each year and month
+SELECT strftime('%Y', Invoice_Date) AS Year, strftime('%m', Invoice_Date) AS Month, SUM(sales_amount) AS Total_Sales, SUM(Units_Sold) AS
+
+ Total_Units_Sold, SUM(Operating_Profit) AS Total_Operating_Profit FROM Adidas_US_Sales GROUP BY strftime('%Y', Invoice_Date), strftime('%m', Invoice_Date) ORDER BY Year, Month;
+
+
+-- 14. Sales by Day
+
+-- Total transactions and total sales for each day
+SELECT CASE strftime('%w', Invoice_Date) WHEN '0' THEN 'Sunday' WHEN '1' THEN 'Monday' WHEN '2' THEN 'Tuesday' WHEN '3' THEN 'Wednesday' WHEN '4' THEN 'Thursday' WHEN '5' THEN 'Friday' WHEN '6' THEN 'Saturday' END AS Day, COUNT(*) AS Total_Transactions, SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales GROUP BY strftime('%w', Invoice_Date) ORDER BY sales_amount DESC;
+
+-- Find the day with the highest sales
+SELECT CASE strftime('%w', Invoice_Date) WHEN '0' THEN 'Sunday' WHEN '1' THEN 'Monday' WHEN '2' THEN 'Tuesday' WHEN '3' THEN 'Wednesday' WHEN '4' THEN 'Thursday' WHEN '5' THEN 'Friday' WHEN '6' THEN 'Saturday' END AS Day, SUM(sales_amount) AS Total_Sales FROM Adidas_US_Sales GROUP BY strftime('%w', Invoice_Date) ORDER BY sales_amount DESC LIMIT 1;
+
+-- 15. Create Sales Category
+
+-- Add sales_category column
+ALTER TABLE Adidas_US_Sales ADD COLUMN sales_category TEXT;
+
+-- Fill sales_category based on Total_Sales
+UPDATE Adidas_US_Sales SET sales_category = CASE WHEN Total_Sales &gt;= 20000 THEN 'High Sales' WHEN Total_Sales &gt;= 10000 THEN 'Medium Sales' ELSE 'Low Sales' END;
+
+
+-- 16. Create Profit Category
+
+-- Add profit_category column
+ALTER TABLE Adidas_US_Sales ADD COLUMN profit_category TEXT;
+
+-- Fill profit_category based on Operating_Profit
+UPDATE Adidas_US_Sales SET profit_category = CASE WHEN Operating_Profit &gt;= 1000 THEN 'High Profit' WHEN Operating_Profit &gt;= 500 THEN 'Medium Profit' ELSE 'Low Profit' END;
+
+-- Find number of transactions in each profit category
+SELECT profit_category, COUNT(*) AS Total_Transactions FROM Adidas_US_Sales GROUP BY profit_category;
+
+
+-- 17. Change the Table
+
+-- Rename total_sales to sales_amount
+ALTER TABLE Adidas_US_Sales RENAME COLUMN Total_Sales TO sales_amount;
+
+-- Add sales_year column
+ALTER TABLE Adidas_US_Sales ADD COLUMN sales_year INTEGER;
+
+-- Fill sales_year with year from invoice_date
+UPDATE Adidas_US_Sales SET sales_year = CAST(strftime('%Y', Invoice_Date) AS INTEGER);
+
+-- Display final table structure
+PRAGMA table_info(Adidas_US_Sales);
+
+-- 18. Best Retailer in Each Region
+SELECT Region, Retailer, Total_Sales FROM (SELECT Region, Retailer, SUM(sales_amount) AS Total_Sales, RANK() OVER (PARTITION BY Region 
+ORDER BY SUM(sales_amount) DESC) AS rnk FROM Adidas_US_Sales GROUP BY Region, Retailer) WHERE rnk = 1;
+
+-- 19. Product Rank for Each Retailer 
+-- For each retailer, rank the products based on their total sales. 
+select retailer,product,total_sales from(select retailer,product,sum(units_sold) as total_sales,rank() over(partition by product 
+order by sum(units_sold) desc) as rnk from Adidas_US_Sales group by retailer,product) where rnk=1;</sql><current_tab id="0"/></tab_sql></sqlb_project>
